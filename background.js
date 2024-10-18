@@ -57,26 +57,37 @@ function extractPageContent() {
 }
 
 // Function to show template selection popup
-function showTemplateSelection(content) {
-  chrome.windows.create({
-    url: chrome.runtime.getURL("template_selection.html"),
-    type: "popup",
-    width: 400,
-    height: 300
-  }, (window) => {
-    // Add listener to handle the selected template
-    chrome.runtime.onMessage.addListener(function handleTemplateSelection(message, sender, sendResponse) {
-      if (message.action === "templateSelected") {
-        console.log("Template selected:", message.template);
-        generateSummary(currentContent, message.template);
-        sendResponse({ success: true });
-      }
+function showTemplateSelection(content, tabId) {
+  chrome.windows.getCurrent((currentWindow) => {
+    const width = 400;
+    const height = 300;
+    const top = currentWindow.top + 85; // Adjust this value as needed
+    const left = currentWindow.left + currentWindow.width - width - 20; // 20px from right edge
+
+    chrome.windows.create({
+      url: chrome.runtime.getURL("template_selection.html"),
+      type: "popup",
+      width: width,
+      height: height,
+      top: top,
+      left: left
+    }, (window) => {
+      templateSelectionWindowId = window.id;
+      chrome.runtime.onMessage.addListener(function handleTemplateSelection(message, sender, sendResponse) {
+        if (message.action === "templateSelected") {
+          chrome.runtime.onMessage.removeListener(handleTemplateSelection);
+          const selectedTemplate = message.template;
+          generateSummary(content, selectedTemplate, tabId);
+          chrome.windows.remove(templateSelectionWindowId);
+          templateSelectionWindowId = null;
+        }
+      });
     });
   });
 }
 
 // Function to generate the summary using OpenAI API
-async function generateSummary(content, template) {
+async function generateSummary(content, template, tabId) {
   if (!openAiApiKey) {
     console.error("API key not set");
     return;
@@ -109,18 +120,34 @@ async function generateSummary(content, template) {
       console.log("Generated summary:", currentSummary);
 
       // Open summary confirmation popup
-      chrome.windows.create({
-        url: chrome.runtime.getURL("summary_popup.html"),
-        type: "popup",
-        width: 550,
-        height: 800
-      });
+      showSummaryPopup(currentSummary, tabId);
     } else {
       console.error("No valid response from OpenAI");
     }
   } catch (error) {
     console.error("Error calling OpenAI API:", error);
   }
+}
+
+// Function to show summary popup
+function showSummaryPopup(initialContent, tabId) {
+  chrome.windows.getCurrent((currentWindow) => {
+    const width = 500;
+    const height = 400;
+    const top = currentWindow.top + 85; // Adjust this value as needed
+    const left = currentWindow.left + currentWindow.width - width - 20; // 20px from right edge
+
+    chrome.windows.create({
+      url: chrome.runtime.getURL("summary_popup.html"),
+      type: "popup",
+      width: width,
+      height: height,
+      top: top,
+      left: left
+    }, (window) => {
+      chrome.tabs.sendMessage(window.tabs[0].id, { action: "showSummary", summary: initialContent });
+    });
+  });
 }
 
 // Listener for messages from popup to get the summary or save to Notion
