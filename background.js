@@ -1,10 +1,9 @@
 // background.js for Chrome Extension
 
 
-const notionApiKey = "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";  // Optional: If Notion API key is also hardcoded
-const openAiApiKey = "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";
-
-const notionPageId = "1234b217bcb3802cb4f0c1da2f53429f";  // The Notion page ID where summaries will be saved
+const notionApiKey = "";  // Optional: If Notion API key is also hardcoded
+const openAiApiKey = "";
+const notionPageId = "";  // The Notion page ID where summaries will be saved
 
 // background.js for Chrome Extension
 
