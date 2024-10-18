@@ -1,9 +1,5 @@
 // background.js for Chrome Extension
-
-
-const notionApiKey = "";  // Optional: If Notion API key is also hardcoded
-const openAiApiKey = "";
-const notionPageId = "";  // The Notion page ID where summaries will be saved
+// The Notion page ID where summaries will be saved
 
 // background.js for Chrome Extension
 
