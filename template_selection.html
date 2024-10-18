@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Template</title>
+    <link rel="stylesheet" href="template_selection.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .template-container {
+            margin-bottom: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head><body>
+    <h2>Select a Template</h2>
+    <div class="template-container">
+        <select id="templateSelector">
+            <option value="Summarize the main points">Summarize the main points</option>
+            <option value="Create a bullet-point summary">Create a bullet-point summary</option>
+            <option value="Provide a brief overview with key highlights">Provide a brief overview with key highlights</option>
+        </select>
+    </div>
+    <button id="confirmTemplate">Confirm Template</button>
+    <script src="template_selection.js" defer></script>
+</body>
+</html>

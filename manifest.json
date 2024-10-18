@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "AI-Backed Summarizer Extension",
+    "version": "1.0",
+    "permissions": [
+      "activeTab",
+      "storage",
+      "scripting"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "commands": {
+      "summarize_page": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+S"
+        },
+        "description": "Summarize the current webpage"
+      }
+    },
+    "action": {
+      "default_icon":"icon.png",
+      "default_title": "Summarize this page"
+    },
+    "icons": {
+        "16": "icon.png"
+      },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["summary_popup.html", "summary_popup.js", "template_selection.html", "template_selection.js"],
+        "matches": ["<all_urls>"]
+      }
+    ]
+  }
